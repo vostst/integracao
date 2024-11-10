@@ -1,0 +1,31 @@
+name: 'Execução Manual'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v3
+
+      - name: Configuração do Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Instalando dependências do sistema
+        run: sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev
+
+      - name: Instalando dependências (yarn global)
+        run: npm install -g yarn
+
+      - name: Instalando dependências do projeto
+        run: yarn install
+
+      - name: Verificando versão do Cypress
+        run: npx cypress --version
+
+      - name: Executando testes Cypress
+        run: yarn run cypress run
